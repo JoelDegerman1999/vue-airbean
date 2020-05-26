@@ -1,5 +1,9 @@
 # Grupparbete - AirBean
 
+Joel Degerman
+Fabian Berger
+Mikael Sondel
+
 Du ska bygga en webbapp där du kan beställa kaffe och få den levererad via drönare (drönare ingår ej i uppgiften).
 
 **Figmaskiss:** https://www.figma.com/file/UeUGVefSdgio0sRxPFccJI/AirBean-v.1.0?node-id=0%3A1
