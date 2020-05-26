@@ -1,7 +1,13 @@
 <template>
   <div class="container">
     <header>
-      <img src="@/assets/graphics/graphics-header.svg" />
+      <img src="@/assets/graphics/graphics-header.svg" class="header-img" />
+      <nav id="nav">
+        <h4>Hamburger Menu</h4>
+        <div class="cart" @click="openCart">
+          <img src="@/assets/graphics/bag.svg" class="cart-btn" />
+        </div>
+      </nav>
     </header>
     <main>
       <div class="title">
@@ -23,7 +29,7 @@
       </div>
     </main>
     <footer>
-      <img src="@/assets/graphics/graphics-footer.svg" />
+      <img src="@/assets/graphics/graphics-footer.svg" class="footer-img" />
     </footer>
   </div>
 </template>
@@ -35,6 +41,11 @@ export default {
     getMenu() {
       return this.$store.state.menu;
     }
+  },
+  methods: {
+    openCart() {
+      this.$router.push("/cart");
+    }
   }
 };
 </script>
@@ -45,8 +56,37 @@ export default {
   display: flex;
   flex-direction: column;
   background: beige;
+
+  header {
+    .header-img {
+      width: 100%;
+    }
+    #nav {
+      padding: 1rem;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      .cart {
+        width: 3rem;
+        height: 3rem;
+        background: rgb(25, 25, 25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+  }
+
   main {
     margin: auto 0;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,6 +138,9 @@ export default {
   }
   footer {
     height: 73px;
+    .footer-img {
+      width: 100%;
+    }
   }
 }
 </style>
