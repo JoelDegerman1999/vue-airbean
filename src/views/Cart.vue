@@ -41,6 +41,25 @@
 
 
 <script>
+function getOrderNumber() {
+  let letters = ["A", "C", "T", "U", "L", "K", "D", "S", "B"];
+  let string = Math.random() * 10 + "";
+  string = string.replace(".", "");
+
+  let orderNumber = string.slice(1, 3);
+  orderNumber = "#" + orderNumber;
+  for (let i = 0; i < 3; i++) {
+    orderNumber += letters[getRandomNumber(letters.length)];
+  }
+  orderNumber += string.slice(5, 8) + letters[getRandomNumber(letters.length)];
+
+  return orderNumber;
+}
+
+function getRandomNumber(num) {
+  return Math.floor(Math.random() * num);
+}
+
 import Header from "../components/Header";
 
 export default {
@@ -61,17 +80,21 @@ export default {
     },
     decreseCount(item) {
       if (item.quantity == 1) {
-        this.$store.commit("remoteItemFromCart", item);
+        this.cartItems = this.cartItems.filter(i => i.id != item.id);
       }
       this.$store.commit("decreaseItemQuantity", item);
     },
     submitOrder() {
       let order = {
-        products: this.cartItems
+        products: this.cartItems,
+        orderNumber: getOrderNumber()
       };
       this.$store.commit("addOrder", order);
       this.$store.commit("clearCartItems");
       this.cartItems = [];
+    },
+    random() {
+      getOrderNumber();
     }
   },
   computed: {
