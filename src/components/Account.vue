@@ -1,7 +1,7 @@
 <template>
     <div>
-        <p>hej</p>
-        <h1>{{activeAccount.name}}</h1>
+        <img src="../assets/graphics/eva-cortado.jpg" alt="">
+        <h2>{{activeAccount.name}}</h2>
         <p>{{activeAccount.email}}</p>
         
     </div>
@@ -10,7 +10,7 @@
 <script>
 export default {
     data: function(){ return {
-        activeAccount: {name: "Tim", email: "Tims mail"}
+        activeAccount: {name: "", email: ""}
     }},
     mounted() {
         if (localStorage.getItem("Accounts") != null){
@@ -27,5 +27,12 @@ export default {
 </script>
 
 <style scoped>
+    div {
+        
+    }
 
+    img {
+        color: black;
+        background-color: black;
+    }
 </style>
