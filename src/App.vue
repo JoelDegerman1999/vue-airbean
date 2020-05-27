@@ -9,14 +9,11 @@
   margin: 0;
   padding: 0;
 }
-html {
-  height: 100%;
-}
 
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
 }
 #app {
   font-family: "Montserrat", sans-serif;

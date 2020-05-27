@@ -14,16 +14,16 @@
         <h1>Meny</h1>
       </div>
       <div class="menu-container">
-        <article v-for="menu in getMenu" :key="menu.id">
+        <article v-for="coffee in getMenu" :key="coffee.id">
           <div class="add">
-            <img src="@/assets/graphics/add.svg" />
+            <img src="@/assets/graphics/add.svg" @click="addCoffeToCart(coffee)" />
           </div>
           <div class="coffe-info">
             <div class="title-and-price">
-              <h1>{{menu.title}}....</h1>
-              <h1>{{menu.price}} kr</h1>
+              <h1>{{coffee.title}}....</h1>
+              <h1>{{coffee.price}} kr</h1>
             </div>
-            <p>{{ menu.desc }}</p>
+            <p>{{ coffee.desc }}</p>
           </div>
         </article>
       </div>
@@ -45,6 +45,9 @@ export default {
   methods: {
     openCart() {
       this.$router.push("/cart");
+    },
+    addCoffeToCart(coffee) {
+      this.$store.commit("addItemtoCart", coffee);
     }
   }
 };
@@ -58,6 +61,7 @@ export default {
   background: beige;
 
   header {
+    background: beige;
     .header-img {
       width: 100%;
     }
@@ -137,10 +141,12 @@ export default {
     }
   }
   footer {
-    height: 73px;
     .footer-img {
+      height: 100%;
       width: 100%;
+      margin-bottom: -4px;
     }
   }
+  background: beige;
 }
 </style>

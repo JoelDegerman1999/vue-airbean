@@ -7,8 +7,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     menu: json.menu,
+    cartItems: [],
   },
-  mutations: {},
+  mutations: {
+    addItemtoCart(state, coffee) {
+      if (!state.cartItems.find((i) => i == coffee)) {
+        state.cartItems.push(coffee);
+      }
+    },
+    remoteItemFromCart(state, payload) {
+      state.cartItems = state.cartItems.filter((i) => i != payload);
+    },
+  },
   actions: {},
   modules: {},
 });
