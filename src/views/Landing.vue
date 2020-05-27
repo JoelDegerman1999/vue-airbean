@@ -1,5 +1,6 @@
 <template>
   <div>
+    <AppNavigator/>
     <h1>This is a landing page</h1>
   </div>
 </template>
