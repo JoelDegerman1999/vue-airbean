@@ -13,7 +13,7 @@
       <article class="your-order">
         <h1>Din beställning</h1>
         <div class="order-container">
-          <div v-for="item in getCartItems" :key="item.id">
+          <div v-for="item in cartItems" :key="item.id">
             <div class="order-menu">
               <div class="order">
                 <h2>{{item.title}}</h2>
@@ -35,7 +35,7 @@
           <p>inkl moms + drönarleverans</p>
         </div>
         <div class="buy">
-          <button class="buy-btn">
+          <button class="buy-btn" @click="submitOrder()">
             <h1>Take my money!</h1>
           </button>
         </div>
@@ -50,28 +50,37 @@
 
 <script>
 export default {
+  data() {
+    return {
+      cartItems: this.$store.state.cartItems
+    };
+  },
   methods: {
     openMenu() {
       this.$router.push("/menu");
     },
     increaseCount(item) {
-      item.quantity++;
+      this.$store.commit("increaseItemQuantity", item);
     },
     decreseCount(item) {
       if (item.quantity == 1) {
         this.$store.commit("remoteItemFromCart", item);
       }
-      item.quantity--;
+      this.$store.commit("decreaseItemQuantity", item);
+    },
+    submitOrder() {
+      let order = {
+        products: this.cartItems
+      };
+      this.$store.commit("addOrder", order);
+      this.$store.commit("clearCartItems");
+      this.cartItems = [];
     }
   },
   computed: {
-    getCartItems() {
-      return this.$store.state.cartItems;
-    },
     getTotal() {
       let total = 0;
-      let items = this.getCartItems;
-      items.forEach(element => {
+      this.cartItems.forEach(element => {
         if (element.quantity > 1) {
           for (let i = 0; i < element.quantity; i++) {
             total += element.price;
