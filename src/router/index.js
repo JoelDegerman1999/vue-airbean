@@ -6,6 +6,8 @@ import Menu from '../views/Menu.vue'
 import Profile from '../views/Profile.vue'
 import Status from '../views/Status.vue'
 import About from '../views/About.vue'
+import Account from '../components/Account.vue'
+import AccountLogin from '../components/AccountLogin.vue'
 
 Vue.use(VueRouter)
 
@@ -38,7 +40,19 @@ Vue.use(VueRouter)
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    children: [
+      {
+        path: '',
+        name: 'LogIn',
+        component: AccountLogin,
+      },
+      {
+        path: ':id',
+        name: 'ProfilePage',
+        component: Account,
+      }
+    ]
   },
 ]
 
