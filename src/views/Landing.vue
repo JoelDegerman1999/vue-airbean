@@ -18,7 +18,7 @@ export default {};
 <style lang="scss" scoped>
 .container {
   height: 100%;
-  background: rgb(3, 70, 3);
+  background: #0E927D;
   display: flex;
   justify-content: center;
   align-items: center;
