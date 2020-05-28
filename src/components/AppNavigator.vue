@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Slide :closeOnNavigation="true" noOverlay width='420'>
+    <Slide :closeOnNavigation="true" noOverlay>
       <article class="bm-item-list">
        <router-link to="/menu">Meny</router-link>
       </article>
@@ -29,6 +29,7 @@ export default {
 <style lang="scss">
 .bm-menu {
     background-color: black;
+    min-width:100%;
     
     
 }
