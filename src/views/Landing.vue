@@ -7,11 +7,14 @@
 
 
 <script>
-export default {
-    
-}
+export default {};
 </script>
 
 <style lang="scss" scoped>
-
+div {
+  background: grey;
+}
+img {
+  width: 200px;
+}
 </style>
