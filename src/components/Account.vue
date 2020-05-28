@@ -1,27 +1,31 @@
 <template>
-    <div>
-        <img src="../assets/graphics/eva-cortado.jpg" alt="">
-        <h2>{{activeAccount.name}}</h2>
-        <p>{{activeAccount.email}}</p>
+    <div class = "container">
+        <img src="../assets/graphics/profile.svg" alt="profil bild">
+        <h2 class = "name">{{activeAccount.name}}</h2>
+        <p class = "email">{{activeAccount.email}}</p>
 
-        <h2 class = "orderListLabel">Order historik</h2>
-        <section class = "orderList"
-        v-for="(order,index) in activeAccount.orderHistory"
-        v-bind:key = index>
-            <section class = "order">
-                <p class = "orderId">{{order.orderId}}</p>
-                <p class = "orderDate">{{order.date}}</p>
-                <p class = "orderSumText">total ordersumma</p>
-                <p class = "orderTotalSum">{{order.totalSum}} kr</p>
-                <hr>
+        <div class="orderContainer">
+            <div class="orderListLabelContainer">
+                <h2 class = "orderListLabel">Order historik</h2>
+            </div>
+            <section class = "orderList"
+            v-for="(order,index) in activeAccount.orderHistory"
+            v-bind:key = index>
+                <section class = "order">
+                    <p class = "orderId">{{order.orderId}}</p>
+                    <p class = "orderDate">{{order.date}}</p>
+                    <p class = "orderSumText">total ordersumma</p>
+                    <p class = "orderTotalSum">{{order.totalSum}} kr</p>
+                    <hr>
+                </section>
             </section>
-        </section>
 
-        <hr>
-        <section class = "totalSpentContainer">
-            <p class = "spentText">Totalt spenderat</p>
-            <p class = "totalSpent">{{getTotalOrderSpenditure()}} kr</p>
-        </section>
+            <hr>
+            <section class = "totalSpentContainer">
+                <p class = "spentText">Totalt spenderat</p>
+                <p class = "totalSpent">{{getTotalOrderSpenditure()}} kr</p>
+            </section>
+        </div>
 
     </div>
 </template>
@@ -54,14 +58,43 @@ export default {
 }
 </script>
 
-<style scoped>
-    img {
-        color: black;
-        background-color: black;
+<style lang="scss" scoped>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color:#2F2926;
+        min-height: 100vh;
+        background-image: url("../assets/graphics/graphics-header.svg");
+        background-repeat: no-repeat;
+        padding-top: 7rem;
     }
 
+
+    img{
+        width: 6rem;
+    }
+
+    .name {
+        color: white;
+    }
+
+    .email {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .orderContainer {
+        padding-top: 4rem;
+        min-width: 90%;
+    }
+    .orderListLabelContainer {
+        display: flex;
+        justify-content: flex-start;
+    }
     .orderListLabel{
+        color:white;
         padding-top: 3rem;
+        padding-bottom: 1.5rem;
     }
     .order {
         background-color: #2F2926;
@@ -103,9 +136,11 @@ export default {
         grid-template-areas: "p p";
     }
         .spentText {
+            color:rgba(255, 255, 255, 0.7);
             display: flex;
         }
         .totalSpent {
+            color:rgba(255, 255, 255, 0.7);
             display: flex;
             justify-content: flex-end;
         }

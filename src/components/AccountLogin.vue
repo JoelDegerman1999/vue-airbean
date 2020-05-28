@@ -1,10 +1,17 @@
 <template>
-    <div>
-        <h1>Välkommen till AirBean-familjen!</h1>
-        <p>Genom att skapa ett konto nedan kan du spara och se din orderhistorik</p>
-        <input v-model = "name" placeholder = "Name">
-        <input v-model = "email" placeholder = "Email Address">
-        <button v-on:click = "login">Brew me a cup!</button>
+    <div class = "body">
+        <div class = "container">
+            <img src="@/assets/graphics/logo.svg" alt="">
+            <h1>Välkommen till AirBean-familjen!</h1>
+            <p>Genom att skapa ett konto nedan kan du spara och se din orderhistorik</p>
+            <input v-model = "name" placeholder = "Name">
+            <input v-model = "email" placeholder = "Email Address">
+            <div class="routerContainer">
+                <router-link to="/menu">
+                    <button v-on:click = "login">Brew me a cup!</button>
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -50,14 +57,29 @@ export default {
 </script>
 
 <style scoped>
-   
+   img {
+       margin-bottom: 1rem;
+       margin-top: 2rem;
+   }
 
-    div {
+    .body {
+        background-color: #2F2926;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        background-image: url("../assets/graphics/graphics-header.svg");
+        background-repeat: no-repeat;
+    }
+
+    .container {
         background-color: #F3E4E1;
-        min-height: 80vh;
+        max-height: 80vh;
+        max-width: 92vw;
         display: flex;
         flex-direction: column;
         align-items: center;
+        border-radius: 1%;
+        margin: 1rem;
     }
 
     input {
@@ -81,5 +103,14 @@ export default {
         border-radius: 20px;
 
         font-size: 150%;
+    }
+
+    h1 {
+        padding-bottom: 1rem;
+        color: #2F2926;
+    }
+
+    p {
+        padding-bottom: 2rem;
     }
 </style>

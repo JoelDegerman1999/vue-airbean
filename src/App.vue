@@ -6,8 +6,12 @@
 </template>
 
 <style lang="scss">
-#app {
+*{
+  margin: 0;
+  padding: 0;
   font-family: 'Montserrat', sans-serif;
+}
+#app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
