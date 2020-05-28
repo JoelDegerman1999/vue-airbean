@@ -4,7 +4,7 @@
         <p>Genom att skapa ett konto nedan kan du spara och se din orderhistorik</p>
         <input v-model = "name" placeholder = "Name">
         <input v-model = "email" placeholder = "Email Address">
-        <button v-on:click = "addAccount">Brew me a cup!</button>
+        <button v-on:click = "login">Brew me a cup!</button>
     </div>
 </template>
 
@@ -16,9 +16,12 @@ export default {
         accounts: []
     }},
     methods: {
-        addAccount() {
+        login() {
             if (this.accounts.findIndex(e => e.email == this.email) == -1) {
-                this.$store.dispatch("addAccount", {name: this.name, email: this.email, id: this.getAcceptableAccountId()})
+                this.$store.dispatch("addAccount", {name: this.name, email: this.email, id: this.getAcceptableAccountId(), orderHistory: []})
+            } else {
+                this.$store.state.currentUser = this.accounts.find(e => e.email == this.email).id
+                localStorage.setItem("currentUser", this.$store.state.currentUser)
             }
             this.setAccounts()
         },
