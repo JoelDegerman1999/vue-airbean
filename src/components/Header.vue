@@ -3,7 +3,7 @@
     <img src="@/assets/graphics/graphics-header.svg" class="header-img" />
     <nav id="nav">
       <h4>Hamburger Menu</h4>
-      <div class="cart" @click="openCart()">
+      <div v-if="showCart" class="cart" @click="openCart()">
         <img src="@/assets/graphics/bag.svg" class="cart-btn" />
       </div>
     </nav>
@@ -12,6 +12,9 @@
 
 <script>
 export default {
+  props: {
+    showCart: Boolean
+  },
   methods: {
     openCart() {
       this.$emit("cartClicked");

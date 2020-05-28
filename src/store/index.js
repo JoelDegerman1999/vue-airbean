@@ -14,13 +14,11 @@ export default new Vuex.Store({
     increaseItemQuantity(state, item) {
       let index = state.cartItems.findIndex((i) => i.id == item.id);
       item.quantity++;
-      console.log(item.quantity);
       state.cartItems.splice(index, 1, item);
     },
     decreaseItemQuantity(state, item) {
       let index = state.cartItems.findIndex((i) => i.id == item.id);
       item.quantity--;
-      console.log(item.quantity);
       state.cartItems.splice(index, 1, item);
     },
     addItemtoCart(state, coffee) {
@@ -28,8 +26,8 @@ export default new Vuex.Store({
         state.cartItems.push(coffee);
       }
     },
-    clearCartItems(state) {
-      state.cartItems = [];
+    remoteItemFromCart(state, item) {
+      state.cartItems = state.cartItems.filter((i) => i.id != item.id);
     },
     addOrder(state, order) {
       state.orders.push(order);
