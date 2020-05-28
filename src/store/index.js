@@ -37,6 +37,12 @@ export default new Vuex.Store({
     remoteItemFromCart(state, item) {
       state.cartItems = state.cartItems.filter((i) => i.id != item.id);
     },
+    clearCart(state) {
+      state.cartItems.forEach((e) => {
+        e.quantity = 1;
+      });
+      state.cartItems = [];
+    },
     addOrder(state, order) {
       state.orders.push(order);
       console.log("Added an order");
@@ -51,9 +57,7 @@ export default new Vuex.Store({
       let totalPrice = {
         totalPrice: order.totalPrice,
       };
-      let quantity = {
-        quantity: order.quantity,
-      };
+      //creating an order
       fetch("http://localhost:8080/realOrders", {
         headers: {
           Accept: "application/json",
@@ -64,7 +68,11 @@ export default new Vuex.Store({
       })
         .then((resp) => resp.json())
         .then((realOrder) => {
+          //creating a orderline for each product in the products array
           order.products.forEach((element) => {
+            let quantity = {
+              quantity: element.quantity,
+            };
             fetch("http://localhost:8080/orderLines", {
               headers: {
                 Accept: "application/json",
@@ -75,6 +83,7 @@ export default new Vuex.Store({
             })
               .then((resp) => resp.json())
               .then((orderLine) => {
+                //associating each product with each orderline
                 fetch(
                   `http://localhost:8080/orderLines/${orderLine.id}/product`,
                   {
@@ -86,7 +95,7 @@ export default new Vuex.Store({
                     body: element._links.product.href,
                   }
                 ).then(() => {
-                  console.log(orderLine._links.self.href);
+                  //associating each orderline to the order
                   fetch(
                     "http://localhost:8080/realOrders/" +
                       realOrder.id +
@@ -99,7 +108,7 @@ export default new Vuex.Store({
                       method: "POST",
                       body: orderLine._links.self.href,
                     }
-                  );
+                  ).then(() => context.commit("clearCart"));
                 });
               });
           });
@@ -109,6 +118,9 @@ export default new Vuex.Store({
       fetch("http://localhost:8080/products")
         .then((resp) => resp.json())
         .then((data) => {
+          data._embedded.products.forEach((element) => {
+            element.quantity = 1;
+          });
           context.state.menu = data._embedded.products;
         });
     },

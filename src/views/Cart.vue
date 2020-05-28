@@ -57,21 +57,20 @@ export default {
       this.$router.push("/menu");
     },
     increaseCount(item) {
-      this.$store.commit("increaseItemQuantity", item);
+      item.quantity++;
     },
     decreseCount(item) {
       if (item.quantity <= 1) {
         this.cartItems = this.cartItems.filter(i => i.id != item.id);
         this.$store.commit("remoteItemFromCart", item);
       } else {
-        this.$store.commit("decreaseItemQuantity", item);
+        item.quantity--;
       }
     },
     submitOrder() {
       let order = {
         products: this.cartItems,
-        totalPrice: this.getTotal,
-        quantity: 1
+        totalPrice: this.getTotal
       };
       this.$store.dispatch("addOrder", order);
       this.cartItems = [];
@@ -81,8 +80,8 @@ export default {
     getTotal() {
       let total = 0;
       this.cartItems.forEach(element => {
-        if (element.quantity > 1) {
-          for (let i = 0; i < element.quantity; i++) {
+        if (this.quantity > 1) {
+          for (let i = 0; i < this.quantity; i++) {
             total += element.price;
           }
         } else {

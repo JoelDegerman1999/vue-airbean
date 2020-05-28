@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     openCart() {
-      console.log("open cart");
       this.$router.push("/cart");
     },
     addCoffeToCart(coffee) {
