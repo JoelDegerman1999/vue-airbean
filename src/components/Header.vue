@@ -3,7 +3,7 @@
     <img src="@/assets/graphics/graphics-header.svg" class="header-img" />
     <nav id="nav">
       <AppNavigator/>
-      <div class="cart" @click="openCart()">
+      <div v-if="showCart" class="cart" @click="openCart()">
         <img src="@/assets/graphics/bag.svg" class="cart-btn" />
       </div>
     </nav>
@@ -16,6 +16,9 @@ import AppNavigator from "../components/AppNavigator";
 export default {
    components: {
     AppNavigator: AppNavigator
+  },
+  props: {
+    showCart: Boolean
   },
   methods: {
     openCart() {

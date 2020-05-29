@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <AppNavigator />
-    <Header @cartClicked="openMenu" />
+    <Header showCart @cartClicked="openMenu" />
     <main>
       <article class="your-order">
         <h1>Din beställning</h1>
@@ -9,7 +9,7 @@
           <div v-for="item in cartItems" :key="item.id">
             <div class="order-menu">
               <div class="order">
-                <h2>{{item.title}}</h2>
+                <h3>{{item.title}}</h3>
                 <p>{{item.price}} kr</p>
               </div>
               <div class="order-quantity">
@@ -42,25 +42,6 @@
 
 
 <script>
-function getOrderNumber() {
-  let letters = ["A", "C", "T", "U", "L", "K", "D", "S", "B"];
-  let string = Math.random() * 10 + "";
-  string = string.replace(".", "");
-
-  let orderNumber = string.slice(1, 3);
-  orderNumber = "#" + orderNumber;
-  for (let i = 0; i < 3; i++) {
-    orderNumber += letters[getRandomNumber(letters.length)];
-  }
-  orderNumber += string.slice(5, 8) + letters[getRandomNumber(letters.length)];
-
-  return orderNumber;
-}
-
-function getRandomNumber(num) {
-  return Math.floor(Math.random() * num);
-}
-
 import Header from "../components/Header";
 import AppNavigator from "../components/AppNavigator";
 
@@ -82,10 +63,12 @@ export default {
       this.$store.commit("increaseItemQuantity", item);
     },
     decreseCount(item) {
-      if (item.quantity == 1) {
+      if (item.quantity <= 1) {
         this.cartItems = this.cartItems.filter(i => i.id != item.id);
+        this.$store.commit("remoteItemFromCart", item);
+      } else {
+        this.$store.commit("decreaseItemQuantity", item);
       }
-      this.$store.commit("decreaseItemQuantity", item);
     },
     submitOrder() {
       let order = {
@@ -123,7 +106,7 @@ export default {
   font-family: "Montserrat", sans-serif;
 }
 .container {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background: beige;
@@ -131,35 +114,38 @@ export default {
   main {
     margin: auto 0;
     padding: 1rem;
-    height: 100%;
 
     .your-order {
       padding: 1rem;
       box-sizing: border-box;
       border-radius: 5px;
       z-index: 1;
-      position: relative;
-      bottom: 13.5%;
-      height: 120%;
+      height: 80%;
+      position: absolute;
+      top: 10%;
       background-color: white;
       display: grid;
       grid-template-rows: 5% 70% 15% 10%;
 
-      .order-menu {
-        margin-top: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .order {
+      .order-container {
+        overflow: auto;
+        padding-bottom: 2rem;
+        .order-menu {
+          margin-top: 2rem;
           display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .order-quantity {
-          display: flex;
-          flex-direction: column;
-          h4 {
-            margin: 0.2rem 0;
+          justify-content: space-between;
+          align-items: center;
+          .order {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .order-quantity {
+            display: flex;
+            flex-direction: column;
+            h4 {
+              margin: 0.2rem 0;
+            }
           }
         }
       }

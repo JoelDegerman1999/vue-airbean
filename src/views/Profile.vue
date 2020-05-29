@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppNavigator />
-    <h1>This is a profile page</h1>
+    <router-view/>
   </div>
 </template>
 
@@ -17,4 +17,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

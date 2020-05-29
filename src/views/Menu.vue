@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <AppNavigator/>
-    <Header @cartClicked="openCart" />
+    <Header @cartClicked="openCart" showCart />
     <main>
       <div class="title">
         <h1>Meny</h1>
@@ -13,7 +13,7 @@
           </div>
           <div class="coffe-info">
             <div class="title-and-price">
-              <h1>{{coffee.title}}....</h1>
+              <h1>{{coffee.title}}</h1>
               <h1>{{coffee.price}} kr</h1>
             </div>
             <p>{{ coffee.desc }}</p>
@@ -59,7 +59,8 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   background: beige;
@@ -112,6 +113,9 @@ export default {
           width: 100%;
           display: flex;
           justify-content: space-between;
+          &:first-child {
+            margin-right: 1rem;
+          }
         }
       }
     }
