@@ -7,7 +7,12 @@
 
 
 <script>
-export default {};
+import AppNavigator from "../components/AppNavigator";
+export default {
+  components: {
+    AppNavigator: AppNavigator
+  }
+};
 </script>
 
 <style lang="scss" scoped>

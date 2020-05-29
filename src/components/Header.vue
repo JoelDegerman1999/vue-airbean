@@ -2,7 +2,7 @@
   <header>
     <img src="@/assets/graphics/graphics-header.svg" class="header-img" />
     <nav id="nav">
-      <h4>Hamburger Menu</h4>
+      <AppNavigator/>
       <div class="cart" @click="openCart()">
         <img src="@/assets/graphics/bag.svg" class="cart-btn" />
       </div>
@@ -11,7 +11,12 @@
 </template>
 
 <script>
+import AppNavigator from "../components/AppNavigator";
+
 export default {
+   components: {
+    AppNavigator: AppNavigator
+  },
   methods: {
     openCart() {
       this.$emit("cartClicked");

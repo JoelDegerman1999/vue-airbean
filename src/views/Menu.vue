@@ -1,7 +1,7 @@
 <template>
   <div class="container">
+    <AppNavigator/>
     <Header @cartClicked="openCart" />
-    <AppNavigator />
     <main>
       <div class="title">
         <h1>Meny</h1>
