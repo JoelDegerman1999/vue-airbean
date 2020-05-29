@@ -24,34 +24,24 @@ export default {
     }},
     methods: {
         login() {
-            if (this.accounts.findIndex(e => e.email == this.email) == -1) {
-                this.$store.dispatch("addAccount", {name: this.name, email: this.email, id: this.getAcceptableAccountId(), orderHistory: []})
+            this.accounts = this.getAccounts
+            if (!this.accounts.find(e => e.email == this.email)) {
+                console.log("account created")
+                let newAccount = {name: this.name, email: this.email}
+                this.$store.dispatch("addAccount", newAccount)
+                this.accounts = this.getAccounts
+                console.log(this.accounts)
             } else {
+                console.log("logged into existing account")
                 this.$store.state.currentUser = this.accounts.find(e => e.email == this.email).id
-                localStorage.setItem("currentUser", this.$store.state.currentUser)
-            }
-            this.setAccounts()
-        },
-        getAcceptableAccountId() {
-            let highestId = this.accounts[0].id
-            this.accounts.forEach(a => {
-                if (a.id > highestId) {
-                    highestId = a.id
-                }
-            });
-
-            return highestId + 1
-        },
-        setAccounts() {
-            if (localStorage.getItem("Accounts") != null){
-                this.accounts = JSON.parse(localStorage.getItem("Accounts"))
-            } else {
-                this.accounts = this.$store.state.Accounts
+                console.log(this.$store.state.currentUser)
             }
         }
     },
-    mounted(){
-        this.setAccounts()
+    computed: {
+        getAccounts(){
+            return this.$store.state.Accounts
+        }
     }
 }
 </script>

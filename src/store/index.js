@@ -6,18 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    Accounts: [
-      {
-        name: "Adam Adamson",
-        email: "adam.adamson@mail.com",
-        id: 1,
-        orderHistory: [
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 231, date: "20/05/28" },
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 2331, date: "20/05/21" },
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 1231, date: "20/05/23" },
-        ],
-      },
-    ],
+    Accounts: [],
     currentUser: -1, //-1 -> logged in as guest
     menu: [],
     cartItems: [],
@@ -27,7 +16,6 @@ export default new Vuex.Store({
     addAccount(state, payload) {
       let newAccount = payload;
       state.Accounts.push(newAccount);
-      localStorage.setItem("Accounts", JSON.stringify(state.Accounts));
     },
     addItemtoCart(state, coffee) {
       if (!state.cartItems.find((i) => i == coffee)) {
@@ -50,8 +38,20 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    addAccount(context, payload) {
-      context.commit("addAccount", payload);
+    addAccount(context, account) {
+      fetch("http://localhost:8080/users", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(account),
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        context.state.currentUser = data.id
+        context.commit("addAccount", data)
+      })
     },
     addOrder(context, order) {
       let totalPrice = {
@@ -124,6 +124,14 @@ export default new Vuex.Store({
           context.state.menu = data._embedded.products;
         });
     },
+    fetchAccounts(context) {
+      fetch("http://localhost:8080/users")
+        .then((resp) => resp.json())
+        .then((data) => {
+          context.state.Accounts = data._embedded.users
+          console.log(context.state.Accounts)
+        });
+    }
   },
   modules: {},
   getters: {},

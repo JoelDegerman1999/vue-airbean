@@ -8,7 +8,7 @@
         <router-link to="/about">Vårt kaffe</router-link>
       </article>
       <article class="bm-item-list">
-        <router-link to="/profile">Min profil</router-link>
+        <router-link :to="`/profile/${getCurrentUser}`">Min profil</router-link>
       </article>
       <article class="bm-item-list">
         <router-link to="/status">Orderstatus</router-link>
@@ -26,6 +26,9 @@ export default {
   computed: {
     computeScreenWidth: function() {
       return screen.width.toString();
+    },
+    getCurrentUser() {
+      return this.$store.state.currentUser
     }
   },
   methods: {

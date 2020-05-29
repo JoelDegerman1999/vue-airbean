@@ -33,18 +33,11 @@
 <script>
 export default {
     data: function(){ return {
-        activeAccount: {orderHistory: [
-        {orderId: "#AAAAAAABBBBBCCCC", totalSum: 231, date: "20/05/28"},
-        {orderId: "#AAAAAAABBBBBCCCC", totalSum: 2331, date: "20/05/21"},
-        {orderId: "#AAAAAAABBBBBCCCC", totalSum: 1231, date: "20/05/23"}]}
+        activeAccount: {}
     }},
-    mounted() {
-        if (localStorage.getItem("Accounts") != null){
-            let arr = JSON.parse(localStorage.getItem("Accounts"))
-            this.activeAccount = arr.filter(a => a.id == this.$route.params.id)[0]
-        } else {
-            this.activeAccount = this.$store.state.Accounts.filter(a => a.id == this.$route.params.id)[0]
-        }
+    beforeMount() {
+        console.log(this.$store.state.Accounts.find(e => console.log(e)))
+        this.activeAccount = this.$store.state.Accounts.find(e => e.id == Number.parseInt(this.$router.params.id))
     },
     methods: {
         getTotalOrderSpenditure() {

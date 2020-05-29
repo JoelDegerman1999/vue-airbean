@@ -39,7 +39,6 @@ Vue.use(VueRouter)
   },
   {
     path: '/profile',
-    name: 'Profile',
     component: Profile,
     children: [
       {
