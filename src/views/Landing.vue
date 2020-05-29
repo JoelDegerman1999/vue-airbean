@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <AppNavigator/>
     <img src="@/assets/graphics/intro-graphic-left.svg" class="intro-left" />
     <router-link to="/menu" class="landing">
       <button>
@@ -12,7 +13,12 @@
 
 
 <script>
-export default {};
+import AppNavigator from "../components/AppNavigator";
+export default {
+  components: {
+    AppNavigator: AppNavigator
+  }
+};
 </script>
 
 <style lang="scss" scoped>

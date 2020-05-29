@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <AppNavigator />
     <Header showCart @cartClicked="openMenu" />
     <main>
       <article class="your-order">
@@ -42,10 +43,12 @@
 
 <script>
 import Header from "../components/Header";
+import AppNavigator from "../components/AppNavigator";
 
 export default {
   components: {
-    Header
+    Header,
+    AppNavigator
   },
   data() {
     return {
