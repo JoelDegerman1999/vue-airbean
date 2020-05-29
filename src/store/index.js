@@ -47,11 +47,11 @@ export default new Vuex.Store({
         method: "POST",
         body: JSON.stringify(account),
       })
-      .then(resp => resp.json())
-      .then(data => {
-        context.state.currentUser = data.id
-        context.commit("addAccount", data)
-      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          context.state.currentUser = data.id;
+          context.commit("addAccount", data);
+        });
     },
     addOrder(context, order) {
       let totalPrice = {
@@ -125,13 +125,13 @@ export default new Vuex.Store({
         });
     },
     fetchAccounts(context) {
-      fetch("http://localhost:8080/users")
+      return fetch("http://localhost:8080/users")
         .then((resp) => resp.json())
         .then((data) => {
-          context.state.Accounts = data._embedded.users
-          console.log(context.state.Accounts)
+          context.state.Accounts = data._embedded.users;
+          console.log("accounts");
         });
-    }
+    },
   },
   modules: {},
   getters: {},

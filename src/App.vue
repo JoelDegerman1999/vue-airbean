@@ -8,7 +8,6 @@
 export default {
   beforeMount() {
     this.$store.dispatch("fetchProducts");
-    this.$store.dispatch("fetchAccounts");
   }
 };
 </script>
