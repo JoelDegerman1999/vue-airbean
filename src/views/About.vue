@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <AppNavigator/>
     <Header />
     <div class="about">
       <h1>Vårt kaffe</h1>
@@ -47,9 +48,12 @@
 
 <script>
 import Header from "@/components/Header";
+import AppNavigator from '../components/AppNavigator'
+
 export default {
   components: {
-    Header
+    Header,
+    AppNavigator
   }
 };
 </script>

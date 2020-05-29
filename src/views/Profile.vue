@@ -1,18 +1,21 @@
 <template>
   <div>
+    <AppNavigator />
     <router-view/>
   </div>
 </template>
 
 
 <script>
-export default {
-    data: function(){return{
+import AppNavigator from "../components/AppNavigator";
 
-    }}
-}
+export default {
+  components: {
+    AppNavigator: AppNavigator
+  }
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>
