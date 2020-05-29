@@ -52,7 +52,8 @@ export default {
   },
   data() {
     return {
-      cartItems: this.$store.state.cartItems
+      cartItems: this.$store.state.cartItems,
+      quantity: 1
     };
   },
   methods: {
@@ -60,27 +61,23 @@ export default {
       this.$router.push("/menu");
     },
     increaseCount(item) {
-      this.$store.commit("increaseItemQuantity", item);
+      item.quantity++;
     },
     decreseCount(item) {
       if (item.quantity <= 1) {
         this.cartItems = this.cartItems.filter(i => i.id != item.id);
         this.$store.commit("remoteItemFromCart", item);
       } else {
-        this.$store.commit("decreaseItemQuantity", item);
+        item.quantity--;
       }
     },
     submitOrder() {
       let order = {
         products: this.cartItems,
-        orderNumber: getOrderNumber()
+        totalPrice: this.getTotal
       };
-      this.$store.commit("addOrder", order);
-      this.$store.commit("clearCartItems");
+      this.$store.dispatch("addOrder", order);
       this.cartItems = [];
-    },
-    random() {
-      getOrderNumber();
     }
   },
   computed: {
