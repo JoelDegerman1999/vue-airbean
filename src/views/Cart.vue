@@ -49,7 +49,8 @@ export default {
   },
   data() {
     return {
-      cartItems: this.$store.state.cartItems
+      cartItems: this.$store.state.cartItems,
+      quantity: 1
     };
   },
   methods: {
@@ -80,8 +81,8 @@ export default {
     getTotal() {
       let total = 0;
       this.cartItems.forEach(element => {
-        if (this.quantity > 1) {
-          for (let i = 0; i < this.quantity; i++) {
+        if (element.quantity > 1) {
+          for (let i = 0; i < element.quantity; i++) {
             total += element.price;
           }
         } else {
