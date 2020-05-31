@@ -1,10 +1,10 @@
 import Api from "./Api";
 
 export default {
-  all() {
+  getAll() {
     return Api.get("users");
   },
-  create(data) {
+  createUser(data) {
     return Api.post("users", data);
   },
 };

@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Product from "../api/Product";
 import Account from "../api/Account";
+import Order from "../api/Order";
+import OrderLine from "../api/OrderLine";
 
 Vue.use(Vuex);
 
@@ -53,69 +55,26 @@ export default new Vuex.Store({
         commit("SET_CURRENT_USER", response.data);
       });
     },
-    addOrder(context, order) {
-      let totalPrice = {
-        totalPrice: order.totalPrice,
-      };
-      //creating an order
-      fetch("http://localhost:8080/realOrders", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(totalPrice),
-      })
-        .then((resp) => resp.json())
-        .then((realOrder) => {
-          //creating a orderline for each product in the products array
-          order.products.forEach((element) => {
-            let quantity = {
-              quantity: element.quantity,
-            };
-            fetch("http://localhost:8080/orderLines", {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              method: "POST",
-              body: JSON.stringify(quantity),
-            })
-              .then((resp) => resp.json())
-              .then((orderLine) => {
-                //associating each product with each orderline
-                fetch(
-                  `http://localhost:8080/orderLines/${orderLine.id}/product`,
-                  {
-                    headers: {
-                      Accept: "application/json",
-                      "Content-Type": "text/uri-list",
-                    },
-                    method: "PUT",
-                    body: element._links.product.href,
-                  }
-                ).then(() => {
-                  //associating each orderline to the order
-                  fetch(
-                    "http://localhost:8080/realOrders/" +
-                      realOrder.id +
-                      "/orderLines",
-                    {
-                      headers: {
-                        Accept: "application/json",
-                        "Content-Type": "text/uri-list",
-                      },
-                      method: "POST",
-                      body: orderLine._links.self.href,
-                    }
-                  ).then(() => context.commit("clearCart"));
-                });
-              });
-          });
+    async createOrder({ commit }, order) {
+      let orderResponse = await Order.create({ totalPrice: order.totalPrice });
+      for (const product of order.products) {
+        let orderLineRespone = await OrderLine.create({
+          quantity: product.quantity,
         });
+        await OrderLine.addProduct(
+          orderLineRespone.data.id,
+          product._links.product.href
+        );
+        await Order.addOrderLine(
+          orderResponse.data.id,
+          orderLineRespone.data._links.self.href
+        );
+      }
+      commit("CLEAR_CART");
     },
+
     getProducts({ commit }) {
-      Product.all().then((response) => {
+      Product.getAll().then((response) => {
         let products = response.data._embedded.products;
         products.forEach((p) => {
           p.quantity = 1;
@@ -124,7 +83,7 @@ export default new Vuex.Store({
       });
     },
     getAccounts({ commit }) {
-      Account.all().then((response) => {
+      Account.getAll().then((response) => {
         let accounts = response.data._embedded.users;
         commit("SET_ACCOUNTS", accounts);
       });

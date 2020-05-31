@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 export default {
-  all() {
+  getAll() {
     return Api.get("products");
   },
 };

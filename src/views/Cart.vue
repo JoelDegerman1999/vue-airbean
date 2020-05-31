@@ -76,7 +76,7 @@ export default {
         products: this.cartItems,
         totalPrice: this.getTotal
       };
-      this.$store.dispatch("addOrder", order);
+      this.$store.dispatch("createOrder", order);
       this.cartItems = [];
     }
   },
