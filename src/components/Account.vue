@@ -1,9 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="currentUserId != -1">
     <img src="../assets/graphics/profile.svg" alt="profil bild" />
-    <h2 class="name">{{activeAccount.name}}</h2>
-    <p class="email">{{activeAccount.email}}</p>
-
+    <h2 class="name">{{getCurrentUser(currentUserId).name}}</h2>
+    <p class="email">{{getCurrentUser(currentUserId).email}}</p>
     <div class="orderContainer">
       <div class="orderListLabelContainer">
         <h2 class="orderListLabel">Order historik</h2>
@@ -32,30 +31,19 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
 export default {
-  data: function() {
-    return {
-      activeAccount: {}
-    };
-  },
-  async beforeMount() {
-    await this.$store.dispatch("fetchAccounts");
-    this.activeAccount = this.getAccounts.find(
-      e => e.id == this.$route.params.id
-    );
-  },
-  methods: {
-    getTotalOrderSpenditure() {
-      let sum = 0;
-      this.activeAccount.orderHistory.forEach(o => {
-        sum += o.totalSum;
-      });
-      return sum;
-    }
+  data() {
+    return {};
   },
   computed: {
-    getAccounts() {
-      return this.$store.state.Accounts;
+    ...mapState(["currentUserId"]),
+    ...mapGetters(["getCurrentUser"])
+  },
+  methods: {},
+  beforeMount() {
+    if (this.currentUserId == -1) {
+      this.$router.push("/profile");
     }
   }
 };

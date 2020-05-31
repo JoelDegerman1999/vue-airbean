@@ -1,57 +1,57 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import * as API from "../api/index";
+import Product from "../api/Product";
+import Account from "../api/Account";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    Accounts: [],
-    currentUser: -1, //-1 -> logged in as guest
+    accounts: [],
+    currentUserId: -1,
     menu: [],
     cartItems: [],
     orders: [],
   },
   mutations: {
-    addAccount(state, payload) {
-      let newAccount = payload;
-      state.Accounts.push(newAccount);
+    SET_PRODUCTS(state, products) {
+      state.menu = products;
     },
-    addItemtoCart(state, coffee) {
+    SET_ACCOUNTS(state, accounts) {
+      state.accounts = accounts;
+    },
+    SET_CURRENT_USER(state, user) {
+      state.currentUserId = user.id;
+    },
+    ADD_ACCOUNT(state, account) {
+      state.accounts.push(account);
+    },
+    ADD_TO_CART(state, coffee) {
       if (!state.cartItems.find((i) => i == coffee)) {
         state.cartItems.push(coffee);
       }
     },
-    remoteItemFromCart(state, item) {
+    REMOVE_FROM_CART(state, item) {
       state.cartItems = state.cartItems.filter((i) => i.id != item.id);
     },
-    clearCart(state) {
+    CLEAR_CART(state) {
       state.cartItems.forEach((e) => {
         e.quantity = 1;
       });
       state.cartItems = [];
     },
-    addOrder(state, order) {
+    ADD_ORDER(state, order) {
       state.orders.push(order);
       console.log("Added an order");
       console.log(state.orders);
     },
   },
   actions: {
-    addAccount(context, account) {
-      fetch("http://localhost:8080/users", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(account),
-      })
-        .then((resp) => resp.json())
-        .then((data) => {
-          context.state.currentUser = data.id;
-          context.commit("addAccount", data);
-        });
+    addAccount({ commit }, account) {
+      Account.create(account).then((response) => {
+        commit("ADD_ACCOUNT", response.data);
+        commit("SET_CURRENT_USER", response.data);
+      });
     },
     addOrder(context, order) {
       let totalPrice = {
@@ -114,25 +114,26 @@ export default new Vuex.Store({
           });
         });
     },
-    fetchProducts(context) {
-      fetch("http://localhost:8080/products")
-        .then((resp) => resp.json())
-        .then((data) => {
-          data._embedded.products.forEach((element) => {
-            element.quantity = 1;
-          });
-          context.state.menu = data._embedded.products;
+    getProducts({ commit }) {
+      Product.all().then((response) => {
+        let products = response.data._embedded.products;
+        products.forEach((p) => {
+          p.quantity = 1;
         });
+        commit("SET_PRODUCTS", products);
+      });
     },
-    fetchAccounts(context) {
-      return fetch("http://localhost:8080/users")
-        .then((resp) => resp.json())
-        .then((data) => {
-          context.state.Accounts = data._embedded.users;
-          console.log("accounts");
-        });
+    getAccounts({ commit }) {
+      Account.all().then((response) => {
+        let accounts = response.data._embedded.users;
+        commit("SET_ACCOUNTS", accounts);
+      });
     },
   },
   modules: {},
-  getters: {},
+  getters: {
+    getCurrentUser: (state) => (id) => {
+      return state.accounts.find((u) => u.id == id);
+    },
+  },
 });

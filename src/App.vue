@@ -4,13 +4,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  beforeMount() {
-    this.$store.dispatch("fetchProducts");
-  }
-};
-</script>
 
 <style lang="scss">
 * {
