@@ -82,12 +82,9 @@ export default {
         products: this.cartItems,
         totalPrice: this.getTotal,
       };
-      let status = await this.createOrder(order);
+      await this.createOrder(order);
       this.cartItems = [];
-      this.$router.push({
-        name: "Status",
-        params: { orderNumber: status.orderNumber, eta: status.eta },
-      });
+      this.$router.push("/status");
     },
   },
   computed: {

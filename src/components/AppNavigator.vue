@@ -21,15 +21,15 @@ import { Slide } from "vue-burger-menu"; // import the CSS transitions you wish 
 import { mapState } from "vuex";
 export default {
   components: {
-    Slide // Register your component
+    Slide, // Register your component
   },
   computed: {
     computeScreenWidth: function() {
       return screen.width.toString();
     },
     ...mapState({
-      currentUser: "currentUserId"
-    })
+      currentUser: "currentUserId",
+    }),
   },
   methods: {
     handleOpenMenu() {
@@ -41,8 +41,8 @@ export default {
     handleCloseMenu() {
       console.log("Menu is closed");
       //  this.$attrs.width='0';
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
@@ -93,5 +93,3 @@ export default {
   color: white;
 }
 </style>
-
-

@@ -16,6 +16,8 @@ export default new Vuex.Store({
     menu: [],
     cartItems: [],
     orders: [],
+    eta: 0,
+    orderNumber: "",
   },
   mutations: {
     SET_PRODUCTS(state, products) {
@@ -72,24 +74,22 @@ export default new Vuex.Store({
           orderLineRespone.data._links.self.href
         );
       }
-      let orderHistoryResponse = await OrderHistory.create(
-        orderResponse.data.orderNumber,
-        order.totalPrice
-      );
-      await Account.addOrder(
-        state.currentUserId,
-        orderHistoryResponse.data._links.self.href
-      );
+      if (state.currentUserId != -1) {
+        let orderHistoryResponse = await OrderHistory.create(
+          orderResponse.data.orderNumber,
+          order.totalPrice
+        );
+        await Account.addOrder(
+          state.currentUserId,
+          orderHistoryResponse.data._links.self.href
+        );
 
-      let getUser = await Account.getUser(state.currentUserId);
-      commit("UPDATE_ACCOUNT", getUser);
+        let getUser = await Account.getUser(state.currentUserId);
+        commit("UPDATE_ACCOUNT", getUser);
+      }
       commit("CLEAR_CART");
-
-      let status = {
-        orderNumber: orderResponse.data.orderNumber,
-        eta: orderResponse.data.eta,
-      };
-      return status;
+      state.eta = orderResponse.data.eta;
+      state.orderNumber = orderResponse.data.orderNumber;
     },
 
     getProducts({ commit }) {
