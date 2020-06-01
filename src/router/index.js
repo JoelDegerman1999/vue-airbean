@@ -9,6 +9,7 @@ import About from "../views/About.vue";
 import Account from "../components/Account.vue";
 import AccountLogin from "../components/AccountLogin.vue";
 
+
 Vue.use(VueRouter);
 
 const routes = [
