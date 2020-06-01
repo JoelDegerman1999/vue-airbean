@@ -9,13 +9,19 @@
           <div v-for="item in cartItems" :key="item.id">
             <div class="order-menu">
               <div class="order">
-                <h3>{{item.title}}</h3>
-                <p>{{item.price}} kr</p>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.price }} kr</p>
               </div>
               <div class="order-quantity">
-                <img src="@/assets/graphics/arrow-up.svg" @click="increaseCount(item)" />
-                <h4>{{item.quantity}}</h4>
-                <img src="@/assets/graphics/arrow-down.svg" @click="decreseCount(item)" />
+                <img
+                  src="@/assets/graphics/arrow-up.svg"
+                  @click="increaseCount(item)"
+                />
+                <h4>{{ item.quantity }}</h4>
+                <img
+                  src="@/assets/graphics/arrow-down.svg"
+                  @click="decreseCount(item)"
+                />
               </div>
             </div>
           </div>
@@ -23,7 +29,7 @@
         <div class="total">
           <div class="total-inner">
             <h1>Total</h1>
-            <h1>{{getTotal}} kr</h1>
+            <h1>{{ getTotal }} kr</h1>
           </div>
           <p>inkl moms + drönarleverans</p>
         </div>
@@ -40,7 +46,6 @@
   </div>
 </template>
 
-
 <script>
 import Header from "../components/Header";
 import AppNavigator from "../components/AppNavigator";
@@ -48,12 +53,12 @@ import AppNavigator from "../components/AppNavigator";
 export default {
   components: {
     Header,
-    AppNavigator
+    AppNavigator,
   },
   data() {
     return {
       cartItems: this.$store.state.cartItems,
-      quantity: 1
+      quantity: 1,
     };
   },
   methods: {
@@ -65,7 +70,7 @@ export default {
     },
     decreseCount(item) {
       if (item.quantity <= 1) {
-        this.cartItems = this.cartItems.filter(i => i.id != item.id);
+        this.cartItems = this.cartItems.filter((i) => i.id != item.id);
         this.$store.commit("remoteItemFromCart", item);
       } else {
         item.quantity--;
@@ -74,16 +79,16 @@ export default {
     submitOrder() {
       let order = {
         products: this.cartItems,
-        totalPrice: this.getTotal
+        totalPrice: this.getTotal,
       };
       this.$store.dispatch("createOrder", order);
       this.cartItems = [];
-    }
+    },
   },
   computed: {
     getTotal() {
       let total = 0;
-      this.cartItems.forEach(element => {
+      this.cartItems.forEach((element) => {
         if (element.quantity > 1) {
           for (let i = 0; i < element.quantity; i++) {
             total += element.price;
@@ -93,8 +98,8 @@ export default {
         }
       });
       return total;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -120,6 +125,7 @@ export default {
       height: 80%;
       position: absolute;
       top: 10%;
+      left: 7.5%;
       background-color: white;
       display: grid;
       grid-template-rows: 5% 70% 15% 10%;

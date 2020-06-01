@@ -4,6 +4,7 @@ import Product from "../api/Product";
 import Account from "../api/Account";
 import Order from "../api/Order";
 import OrderLine from "../api/OrderLine";
+import OrderHistory from "../api/OrderHistory";
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   state: {
     accounts: [],
     currentUserId: -1,
+    orderHistory: [],
     menu: [],
     cartItems: [],
     orders: [],
@@ -37,9 +39,6 @@ export default new Vuex.Store({
       state.cartItems = state.cartItems.filter((i) => i.id != item.id);
     },
     CLEAR_CART(state) {
-      state.cartItems.forEach((e) => {
-        e.quantity = 1;
-      });
       state.cartItems = [];
     },
     ADD_ORDER(state, order) {
@@ -50,12 +49,12 @@ export default new Vuex.Store({
   },
   actions: {
     addAccount({ commit }, account) {
-      Account.create(account).then((response) => {
+      Account.createUser(account).then((response) => {
         commit("ADD_ACCOUNT", response.data);
         commit("SET_CURRENT_USER", response.data);
       });
     },
-    async createOrder({ commit }, order) {
+    async createOrder({ commit, state }, order) {
       let orderResponse = await Order.create({ totalPrice: order.totalPrice });
       for (const product of order.products) {
         let orderLineRespone = await OrderLine.create({
@@ -70,6 +69,14 @@ export default new Vuex.Store({
           orderLineRespone.data._links.self.href
         );
       }
+      let orderHistoryResponse = await OrderHistory.create(
+        orderResponse.data.orderNumber,
+        order.totalPrice
+      );
+      await Account.addOrder(
+        state.currentUserId,
+        orderHistoryResponse.data._links.self.href
+      );
       commit("CLEAR_CART");
     },
 
