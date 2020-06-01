@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppNavigator />
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -12,10 +12,12 @@ import AppNavigator from "../components/AppNavigator";
 export default {
   components: {
     AppNavigator: AppNavigator
+  },
+  mounted() {
+    this.$store.dispatch("getAccounts");
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

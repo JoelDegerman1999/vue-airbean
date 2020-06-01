@@ -1,65 +1,65 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Landing from '../views/Landing.vue'
-import Cart from '../views/Cart.vue'
-import Menu from '../views/Menu.vue'
-import Profile from '../views/Profile.vue'
-import Status from '../views/Status.vue'
-import About from '../views/About.vue'
-import Account from '../components/Account.vue'
-import AccountLogin from '../components/AccountLogin.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Landing from "../views/Landing.vue";
+import Cart from "../views/Cart.vue";
+import Menu from "../views/Menu.vue";
+import Profile from "../views/Profile.vue";
+import Status from "../views/Status.vue";
+import About from "../views/About.vue";
+import Account from "../components/Account.vue";
+import AccountLogin from "../components/AccountLogin.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-  const routes = [
+const routes = [
   {
-    path: '/landing',
-    name: 'Landing',
-    component: Landing
+    path: "/landing",
+    name: "Landing",
+    component: Landing,
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: "/about",
+    name: "About",
+    component: About,
   },
   {
-    path: '/menu',
-    name: 'Menu',
-    component: Menu
+    path: "/menu",
+    name: "Menu",
+    component: Menu,
   },
   {
-    path: '/cart',
-    name: 'Cart',
-    component: Cart
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
   },
   {
-    path: '/status',
-    name: 'Status',
-    component: Status
+    path: "/status",
+    name: "Status",
+    component: Status,
+    props: true,
   },
   {
-    path: '/profile',
-    name: 'Profile',
+    path: "/profile",
     component: Profile,
     children: [
       {
-        path: '',
-        name: 'LogIn',
+        path: "",
+        name: "LogIn",
         component: AccountLogin,
       },
       {
-        path: ':id',
-        name: 'ProfilePage',
+        path: ":id",
+        name: "ProfilePage",
         component: Account,
-      }
-    ]
+      },
+    ],
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Slide :width=computeScreenWidth closeOnNavigation noOverlay>
+    <Slide :width="computeScreenWidth" closeOnNavigation noOverlay>
       <article class="bm-item-list">
         <router-link to="/menu">Meny</router-link>
       </article>
@@ -8,7 +8,7 @@
         <router-link to="/about">Vårt kaffe</router-link>
       </article>
       <article class="bm-item-list">
-        <router-link to="/profile">Min profil</router-link>
+        <router-link :to="`/profile/${currentUser}`">Min profil</router-link>
       </article>
       <article class="bm-item-list">
         <router-link to="/status">Orderstatus</router-link>
@@ -18,7 +18,7 @@
 </template>
 <script>
 import { Slide } from "vue-burger-menu"; // import the CSS transitions you wish to use, in this case we are using `Slide`
-
+import { mapState } from "vuex";
 export default {
   components: {
     Slide // Register your component
@@ -26,13 +26,16 @@ export default {
   computed: {
     computeScreenWidth: function() {
       return screen.width.toString();
-    }
+    },
+    ...mapState({
+      currentUser: "currentUserId"
+    })
   },
   methods: {
     handleOpenMenu() {
       console.log("Menu is opened");
       // console.log(this.$parent.)
-     // console.log(computeScreenWidth);
+      // console.log(computeScreenWidth);
       // this.$refs.sideNav.style.width = '100%';
     },
     handleCloseMenu() {
