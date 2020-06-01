@@ -99,6 +99,9 @@ img {
   display: flex;
   justify-content: flex-start;
 }
+.orderList {
+  margin-bottom: 2rem;
+}
 .orderListLabel {
   color: white;
   padding-top: 3rem;
@@ -143,6 +146,7 @@ img {
 .totalSpentContainer {
   display: grid;
   grid-template-areas: "p p";
+  margin: 1rem 0 3rem 0;
 }
 .spentText {
   color: rgba(255, 255, 255, 0.7);
