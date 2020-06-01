@@ -80,6 +80,7 @@ export default {
         align-items: center;
         border-radius: 1%;
         margin: 1rem;
+        margin-top: 5rem;
     }
 
     input {
