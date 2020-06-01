@@ -55,24 +55,25 @@ img {
 
 .body {
   background-color: #2f2926;
-  min-height: 100vh;
   display: flex;
+  height: 100vh;
   justify-content: center;
   background-image: url("../assets/graphics/graphics-header.svg");
   background-repeat: no-repeat;
 }
 
-    .container {
-        background-color: #F3E4E1;
-        max-height: 80vh;
-        max-width: 92vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border-radius: 1%;
-        margin: 1rem;
-        margin-top: 5rem;
-    }
+  .container {
+      background-color: #F3E4E1;
+      max-width: 92vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 1%;
+      margin: 1rem;
+      margin-top: 5rem;
+      padding: 0.5rem;
+      box-sizing: border-box;
+  }
 
 input {
   background-color: #f3e4e1;

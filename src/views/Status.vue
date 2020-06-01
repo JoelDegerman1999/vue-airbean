@@ -1,11 +1,13 @@
 <template>
   <div class="container">
-    <h4 class="order-number">Ordernummer {{ orderNumber }}</h4>
+    <p class="order-number">Ordernummer <strong>{{ orderNumber }}</strong></p>
 
     <img src="@/assets/graphics/drone.svg" />
-    <h2>Din beställning är på väg</h2>
+    <div class = "eta">
+      <h1>Din beställning är på väg</h1>
 
-    <h4>{{ eta }}</h4>
+      <p><strong>{{ eta }}</strong> minuter</p>
+    </div>
 
     <div class="accept">
       <router-link to="/menu">
@@ -29,7 +31,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   height: 100%;
-  padding: 1rem;
+  padding: 2rem;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -38,25 +40,38 @@ export default {
   img {
     flex: 1;
   }
-  h4 {
+  p {
     flex: 1;
     margin-top: 5vh;
+    color: rgba(255, 255, 255, 0.7);
   }
-  h2 {
+  .eta h1 {
     flex: 4;
+    color: white;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+  .eta p {
+    color: white;
+  }
+
+  .eta {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
   }
 
   .accept {
     flex: 3;
     .accept-btn {
       height: 3.5rem;
-      width: 18rem;
+      width: 85%;
       outline: none;
       border: none;
       border-radius: 40px;
       background-color: white;
       h1 {
-        color: black;
+        color: #2F2926;
         font-weight: 600;
         letter-spacing: 0.2rem;
       }
