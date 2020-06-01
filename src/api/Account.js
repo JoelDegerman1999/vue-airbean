@@ -4,6 +4,9 @@ export default {
   getAll() {
     return Api.get("users");
   },
+  getUser(id) {
+    return Api.get(`users/${id}?projection=customUser`);
+  },
   createUser(data) {
     return Api.post("users", data);
   },

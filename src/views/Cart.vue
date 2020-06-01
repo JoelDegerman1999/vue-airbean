@@ -49,7 +49,7 @@
 <script>
 import Header from "../components/Header";
 import AppNavigator from "../components/AppNavigator";
-
+import { mapActions } from "vuex";
 export default {
   components: {
     Header,
@@ -76,13 +76,18 @@ export default {
         item.quantity--;
       }
     },
-    submitOrder() {
+    ...mapActions(["createOrder"]),
+    async submitOrder() {
       let order = {
         products: this.cartItems,
         totalPrice: this.getTotal,
       };
-      this.$store.dispatch("createOrder", order);
+      let status = await this.createOrder(order);
       this.cartItems = [];
+      this.$router.push({
+        name: "Status",
+        params: { orderNumber: status.orderNumber, eta: status.eta },
+      });
     },
   },
   computed: {

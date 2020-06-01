@@ -27,6 +27,9 @@ export default new Vuex.Store({
     SET_CURRENT_USER(state, user) {
       state.currentUserId = user.id;
     },
+    ADD_ORDER_HISTORY(state, payload) {
+      state.orderHistory.push(payload);
+    },
     ADD_ACCOUNT(state, account) {
       state.accounts.push(account);
     },
@@ -41,10 +44,10 @@ export default new Vuex.Store({
     CLEAR_CART(state) {
       state.cartItems = [];
     },
-    ADD_ORDER(state, order) {
-      state.orders.push(order);
-      console.log("Added an order");
-      console.log(state.orders);
+    UPDATE_ACCOUNT(state, payload) {
+      let id = payload.data.id;
+      let foundUserIndex = state.accounts.findIndex((u) => u.id == id);
+      state.accounts.splice(foundUserIndex, 1, payload.data);
     },
   },
   actions: {
@@ -77,7 +80,16 @@ export default new Vuex.Store({
         state.currentUserId,
         orderHistoryResponse.data._links.self.href
       );
+
+      let getUser = await Account.getUser(state.currentUserId);
+      commit("UPDATE_ACCOUNT", getUser);
       commit("CLEAR_CART");
+
+      let status = {
+        orderNumber: orderResponse.data.orderNumber,
+        eta: orderResponse.data.eta,
+      };
+      return status;
     },
 
     getProducts({ commit }) {

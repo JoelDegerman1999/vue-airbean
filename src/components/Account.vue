@@ -1,31 +1,33 @@
 <template>
   <div class="container" v-if="currentUserId != -1">
     <img src="../assets/graphics/profile.svg" alt="profil bild" />
-    <h2 class="name">{{getCurrentUser(currentUserId).name}}</h2>
-    <p class="email">{{getCurrentUser(currentUserId).email}}</p>
+    <h2 class="name">{{ getCurrentUser(currentUserId).name }}</h2>
+    <p class="email">{{ getCurrentUser(currentUserId).email }}</p>
     <div class="orderContainer">
       <div class="orderListLabelContainer">
         <h2 class="orderListLabel">Order historik</h2>
       </div>
-      <!-- <section
-        class="orderList"
-        v-for="(order,index) in activeAccount.orderHistory"
-        v-bind:key="index"
-      >
-        <section class="order">
-          <p class="orderId">{{order.orderId}}</p>
-          <p class="orderDate">{{order.date}}</p>
-          <p class="orderSumText">total ordersumma</p>
-          <p class="orderTotalSum">{{order.totalSum}} kr</p>
-          <hr />
+      <div v-if="getUserOrderHistory">
+        <section
+          class="orderList"
+          v-for="(order, index) in getUserOrderHistory"
+          v-bind:key="index"
+        >
+          <section class="order">
+            <p class="orderId">{{ order.orderNumber }}</p>
+            <p class="orderDate">{{ order.date }}</p>
+            <p class="orderSumText">total ordersumma</p>
+            <p class="orderTotalSum">{{ order.totalSum }} kr</p>
+            <hr />
+          </section>
         </section>
-      </section>-->
 
-      <hr />
-      <section class="totalSpentContainer">
-        <p class="spentText">Totalt spenderat</p>
-        <p class="totalSpent">kr</p>
-      </section>
+        <hr />
+        <section class="totalSpentContainer">
+          <p class="spentText">Totalt spenderat</p>
+          <p class="totalSpent">{{ getTotalAmount }} kr</p>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -37,15 +39,31 @@ export default {
     return {};
   },
   computed: {
+    //this.$store.state.currentUserId
     ...mapState(["currentUserId"]),
-    ...mapGetters(["getCurrentUser"])
+    ...mapGetters(["getCurrentUser"]),
+    getTotalAmount() {
+      let sum = 0;
+      let user = this.getCurrentUser(this.currentUserId);
+      for (const order of user.orderHistory) {
+        sum += order.totalSum;
+      }
+      return sum;
+    },
+    getUserOrderHistory() {
+      let user = this.getCurrentUser(this.currentUserId);
+      if (user.orderHistory.length > 0) {
+        return user.orderHistory;
+      }
+      return null;
+    },
   },
   methods: {},
   beforeMount() {
     if (this.currentUserId == -1) {
       this.$router.push("/profile");
     }
-  }
+  },
 };
 </script>
 
