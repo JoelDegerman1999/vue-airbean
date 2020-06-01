@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <AppNavigator/>
+    <AppNavigator />
     <Header @cartClicked="openCart" showCart />
     <main>
       <div class="title">
@@ -35,7 +35,6 @@ export default {
   components: {
     Header,
     AppNavigator
-
   },
   computed: {
     getMenu() {
@@ -47,11 +46,11 @@ export default {
       this.$router.push("/cart");
     },
     addCoffeToCart(coffee) {
-      this.$store.commit("addItemtoCart", coffee);
-    },
-    test() {
-      console.log("hej");
+      this.$store.commit("ADD_TO_CART", coffee);
     }
+  },
+  mounted() {
+    this.$store.dispatch("getProducts");
   }
 };
 </script>

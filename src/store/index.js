@@ -1,130 +1,117 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import * as API from "../api/index";
+import Product from "../api/Product";
+import Account from "../api/Account";
+import Order from "../api/Order";
+import OrderLine from "../api/OrderLine";
+import OrderHistory from "../api/OrderHistory";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    Accounts: [
-      {
-        name: "Adam Adamson",
-        email: "adam.adamson@mail.com",
-        id: 1,
-        orderHistory: [
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 231, date: "20/05/28" },
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 2331, date: "20/05/21" },
-          { orderId: "#AAAAAAABBBBBCCCC", totalSum: 1231, date: "20/05/23" },
-        ],
-      },
-    ],
-    currentUser: -1, //-1 -> logged in as guest
+    accounts: [],
+    currentUserId: -1,
+    orderHistory: [],
     menu: [],
     cartItems: [],
     orders: [],
+    eta: 0,
+    orderNumber: "",
   },
   mutations: {
-    addAccount(state, payload) {
-      let newAccount = payload;
-      state.Accounts.push(newAccount);
-      localStorage.setItem("Accounts", JSON.stringify(state.Accounts));
+    SET_PRODUCTS(state, products) {
+      state.menu = products;
     },
-    addItemtoCart(state, coffee) {
+    SET_ACCOUNTS(state, accounts) {
+      state.accounts = accounts;
+    },
+    SET_CURRENT_USER(state, user) {
+      state.currentUserId = user.id;
+    },
+    ADD_ORDER_HISTORY(state, payload) {
+      state.orderHistory.push(payload);
+    },
+    ADD_ACCOUNT(state, account) {
+      state.accounts.push(account);
+    },
+    ADD_TO_CART(state, coffee) {
       if (!state.cartItems.find((i) => i == coffee)) {
         state.cartItems.push(coffee);
       }
     },
-    remoteItemFromCart(state, item) {
+    REMOVE_FROM_CART(state, item) {
       state.cartItems = state.cartItems.filter((i) => i.id != item.id);
     },
-    clearCart(state) {
-      state.cartItems.forEach((e) => {
-        e.quantity = 1;
-      });
+    CLEAR_CART(state) {
       state.cartItems = [];
     },
-    addOrder(state, order) {
-      state.orders.push(order);
-      console.log("Added an order");
-      console.log(state.orders);
+    UPDATE_ACCOUNT(state, payload) {
+      let id = payload.data.id;
+      let foundUserIndex = state.accounts.findIndex((u) => u.id == id);
+      state.accounts.splice(foundUserIndex, 1, payload.data);
     },
   },
   actions: {
-    addAccount(context, payload) {
-      context.commit("addAccount", payload);
+    addAccount({ commit }, account) {
+      Account.createUser(account).then((response) => {
+        commit("ADD_ACCOUNT", response.data);
+        commit("SET_CURRENT_USER", response.data);
+      });
     },
-    addOrder(context, order) {
-      let totalPrice = {
-        totalPrice: order.totalPrice,
-      };
-      //creating an order
-      fetch("http://localhost:8080/realOrders", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(totalPrice),
-      })
-        .then((resp) => resp.json())
-        .then((realOrder) => {
-          //creating a orderline for each product in the products array
-          order.products.forEach((element) => {
-            let quantity = {
-              quantity: element.quantity,
-            };
-            fetch("http://localhost:8080/orderLines", {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              method: "POST",
-              body: JSON.stringify(quantity),
-            })
-              .then((resp) => resp.json())
-              .then((orderLine) => {
-                //associating each product with each orderline
-                fetch(
-                  `http://localhost:8080/orderLines/${orderLine.id}/product`,
-                  {
-                    headers: {
-                      Accept: "application/json",
-                      "Content-Type": "text/uri-list",
-                    },
-                    method: "PUT",
-                    body: element._links.product.href,
-                  }
-                ).then(() => {
-                  //associating each orderline to the order
-                  fetch(
-                    "http://localhost:8080/realOrders/" +
-                      realOrder.id +
-                      "/orderLines",
-                    {
-                      headers: {
-                        Accept: "application/json",
-                        "Content-Type": "text/uri-list",
-                      },
-                      method: "POST",
-                      body: orderLine._links.self.href,
-                    }
-                  ).then(() => context.commit("clearCart"));
-                });
-              });
-          });
+    async createOrder({ commit, state }, order) {
+      let orderResponse = await Order.create({ totalPrice: order.totalPrice });
+      for (const product of order.products) {
+        let orderLineRespone = await OrderLine.create({
+          quantity: product.quantity,
         });
+        await OrderLine.addProduct(
+          orderLineRespone.data.id,
+          product._links.product.href
+        );
+        await Order.addOrderLine(
+          orderResponse.data.id,
+          orderLineRespone.data._links.self.href
+        );
+      }
+      if (state.currentUserId != -1) {
+        let orderHistoryResponse = await OrderHistory.create(
+          orderResponse.data.orderNumber,
+          order.totalPrice
+        );
+        await Account.addOrder(
+          state.currentUserId,
+          orderHistoryResponse.data._links.self.href
+        );
+
+        let getUser = await Account.getUser(state.currentUserId);
+        commit("UPDATE_ACCOUNT", getUser);
+      }
+      commit("CLEAR_CART");
+      state.eta = orderResponse.data.eta;
+      state.orderNumber = orderResponse.data.orderNumber;
     },
-    fetchProducts(context) {
-      fetch("http://localhost:8080/products")
-        .then((resp) => resp.json())
-        .then((data) => {
-          data._embedded.products.forEach((element) => {
-            element.quantity = 1;
-          });
-          context.state.menu = data._embedded.products;
+
+    getProducts({ commit }) {
+      Product.getAll().then((response) => {
+        let products = response.data._embedded.products;
+        products.forEach((p) => {
+          p.quantity = 1;
         });
+        commit("SET_PRODUCTS", products);
+      });
+    },
+    getAccounts({ commit }) {
+      Account.getAll().then((response) => {
+        let accounts = response.data._embedded.users;
+        commit("SET_ACCOUNTS", accounts);
+      });
     },
   },
   modules: {},
-  getters: {},
+  getters: {
+    getCurrentUser: (state) => (id) => {
+      return state.accounts.find((u) => u.id == id);
+    },
+  },
 });
